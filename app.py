@@ -10,17 +10,17 @@ PATTERN_URL = 'https://habr.com/'
 PATTERN_WORD = r'\b[\w]{6}\b'
 
 
-def replace_words(html):
-    for word in html.find_all(text=re.compile(PATTERN_WORD)):
+def replace_words(obj):
+    for word in obj.find_all(text=re.compile(PATTERN_WORD)):
         word.replace_with(re.sub(PATTERN_WORD, lambda w: w.group(0)+'™', word))
-    return html
+    return obj
 
 
-def replace_hrefs(html):
-    for a in html.find_all('a', 'href' is not None):
+def replace_hrefs(obj):
+    for a in obj.find_all('a', 'href' is not None):
         host = 'http://{}:5000/'.format(HOST)
         a['href'] = a['href'].replace(PATTERN_URL, host)
-    return html
+    return obj
 
 
 @app.route('/')
