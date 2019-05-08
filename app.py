@@ -3,9 +3,11 @@ import requests
 from flask import Flask
 from bs4 import BeautifulSoup as bs
 
+app = Flask(__name__)
+
+HOST = '0.0.0.0'
 PATTERN_URL = 'https://habr.com/'
 PATTERN_WORD = r'\b[\w]{6}\b'
-app = Flask(__name__)
 
 
 def replace_words(html):
@@ -16,7 +18,8 @@ def replace_words(html):
 
 def replace_hrefs(html):
     for a in html.find_all('a', 'href' is not None):
-        a['href'] = a['href'].replace(PATTERN_URL, 'http://127.0.0.1:5000/')
+        host = 'http://{}:5000/'.format(HOST)
+        a['href'] = a['href'].replace(PATTERN_URL, host)
     return html
 
 
@@ -31,4 +34,4 @@ def index(path=''):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host=HOST)
